@@ -1,0 +1,50 @@
+﻿@page "/dbmanroutineregs"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+@inject MyDbService MyDbService
+
+<h1>Database Admininstration Routines</h1>
+
+<p>List of database administration routines.</p>
+
+@if (regs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SQL</th>
+                <th>Desc</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in regs)
+            {
+                <tr>
+                    <td>
+                        <NavLink class="nav-link" href="@{"DBManRoutineRegs_"+r.Name}">
+                            @r.Name
+                        </NavLink>
+                    </td>
+                    <td>@r.SQL</td>
+                    <td>@r.Desc</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private DBManRoutineReg[] regs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        regs = await MyDbService.GetDBManRoutineRegsAsync();
+    }
+}

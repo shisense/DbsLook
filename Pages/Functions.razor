@@ -1,0 +1,52 @@
+﻿@page "/functions"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+@inject MyDbService MyDbService
+
+<h1>Functions</h1>
+
+<p>List of functions.</p>
+
+@if (procs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Routine_Name</th>
+                <th>Data_Type</th>
+                <th>Create_Date</th>
+                <th>Modify_Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in procs)
+            {
+            <tr>
+                <td>
+                    <NavLink class="nav-link" href="@{"functiondef/"+t.RoutineName}">
+                        @t.RoutineName
+                    </NavLink>
+                </td>
+                <td>@t.DataType</td>
+                <td>@t.CreateDate</td>
+                <td>@t.ModifyDate</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private Function[] procs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        procs = await MyDbService.GetFunctionsAsync();
+    }
+}

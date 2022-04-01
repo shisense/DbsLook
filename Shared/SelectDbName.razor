@@ -1,0 +1,54 @@
+﻿@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+@inject MyDbService myDbService
+@inject AppState appState
+
+
+
+<span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+Database:<strong>@dname </strong>
+
+
+@code {
+
+
+    /*
+    https://chrissainty.com/3-ways-to-communicate-between-components-in-blazor/
+
+
+    */
+
+
+
+
+    private string dname;
+
+
+    protected override async void OnInitialized()
+    {
+        appState.OnChange += OnMyChangeHandler;
+
+        dname = (await myDbService.GetDBsAsync()).First(d => d.Current).DBName;
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= OnMyChangeHandler;
+    }
+
+
+    private async void OnMyChangeHandler()
+    {
+        //this.InvokeAsync(() => this.StateHasChanged());
+
+        dname = appState.DbName;
+
+
+        await InvokeAsync(() =>
+        {
+                //DoStuff();
+                StateHasChanged();
+        });
+    }
+
+}

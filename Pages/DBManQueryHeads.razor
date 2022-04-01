@@ -1,0 +1,50 @@
+﻿@page "/dbmanqueryhead"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+
+@inject MyDbService MyDbService
+@inject AppState appState
+
+<h1>Queries</h1>
+
+<p>List of predefined database queries.</p>
+
+@if (regs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in regs)
+            {
+                <tr>
+                    <td>
+                        <NavLink class="nav-link" href="@{"queryheadgrid/"+r.Name}">
+                            @r.Name
+                        </NavLink>
+                    </td>
+                    <td>@r.SQL</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private DBManQueryHead[] regs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        regs = await MyDbService.GetDBManQueryHeadAsync(appState.DbName);
+    }
+}

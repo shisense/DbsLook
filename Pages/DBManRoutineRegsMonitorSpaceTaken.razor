@@ -1,0 +1,52 @@
+﻿@page "/DBManRoutineRegs_MonitorSpaceTaken"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+@inject MyDbService MyDbService
+
+<h1>Space Taken</h1>
+
+<p>List of spaces taken by tables, in descending order.</p>
+
+@if (data == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>TableName</th>
+                <th>RowCounts</th>
+                <th>Used_MB</th>
+                <th>Unused_MB</th>
+                <th>Total_MB</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in data)
+            {
+            <tr>
+                <td>
+                    @t.TableName
+                </td>
+                <td>@t.RowCounts</td>
+                <td>@t.Used_MB</td>
+                <td>@t.Unused_MB</td>
+                <td>@t.Total_MB</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private DBManRoutineRegTableSpace[] data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MyDbService.GetDBManRoutineRegTableSpacesAsync();
+    }
+}

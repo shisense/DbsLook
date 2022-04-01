@@ -1,0 +1,61 @@
+﻿@page "/columns/{tblname}"
+
+@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+@inject WeatherForecastService ForecastService
+@inject MyDbService myDbService
+@inject NavigationManager NavManager
+
+@using Microsoft.AspNetCore.WebUtilities
+
+<h1>Table: @tblname</h1>
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>Columns</strong>
+
+</div>
+
+@if (columns == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Column_Name</th>
+            <th>Data_Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in columns)
+        {
+            <tr>
+                <td>@c.ColumnName</td>
+                <td>@c.DataType</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<QueryTable query_name="Top records" sql=@sql></QueryTable>
+}
+    
+
+@code {
+    private Column[] columns;
+    private string sql { get { return "select top 10 * from " + tblname; } }
+
+
+    [Parameter]
+    public string tblname { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        columns = (await myDbService.GetColumnsAsync(tblname));
+
+
+    }
+}

@@ -1,0 +1,86 @@
+﻿@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+@using System.Data;
+
+@inject MyDbService myDbService
+@inject NavigationManager NavManager
+
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>Script</strong>
+
+</div>
+
+<div><code><pre>@sql</pre></code></div>
+
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>Result</strong>
+
+</div>
+
+<div class="scroll">
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (DataColumn c in dt.Columns)
+                {
+                    <th>@c.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (DataRow r in dt.Rows)
+            {
+                <tr>
+                    @foreach (DataColumn c in dt.Columns)
+                    {
+                        <td>@r[c].ToString()</td>
+                    }
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+    @code {
+
+        private string sql;
+
+        [Parameter]
+        public string query_name { get; set; }
+
+        private DataTable dt;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            /*
+            Chronometer.Start("Get QueryRegd");
+            sql = await myDbService.GetQueryRegdAsync(query_name);
+            
+            Chronometer.Add($"Run QueryRegd");
+            dt = await myDbService.GetQueryTableAsync(sql);
+            Chronometer.End();
+            */
+
+
+            // even above code work, the following way is clearner. preferred.
+            Chronometer.Run("GetQueryRegdAsync", async () =>
+            {
+                sql = await myDbService.GetQueryRegdAsync(query_name);
+            });
+
+
+            Chronometer.Run("GetQueryTableAsync", async () =>
+            {
+                dt = await myDbService.GetQueryTableAsync(sql);
+            });
+
+        }
+    }

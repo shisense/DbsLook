@@ -1,0 +1,18 @@
+﻿@page "/queryheadgrid/{name}"
+
+<h1>Query: @name</h1>
+
+
+
+<QueryRegd query_name=@name></QueryRegd>
+
+
+@code {
+
+
+
+    [Parameter]
+    public string name { get; set; }
+
+
+}

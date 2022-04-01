@@ -1,0 +1,92 @@
+﻿@page "/RmaDataMappingValidation"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+@inject MyDbService myDbService
+
+<h1>RmaDataMappingValidation</h1>
+
+<p>RmaDataMappingValidation.</p>
+
+@if (mapping_codes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>
+        <select class="form-control selectpicker" @onchange="onMapCode">
+            <option value="select">--select a Mapping Code--</option>
+            @foreach (var c in mapping_codes)
+            {
+                <option value="@c">@c</option>
+            }
+        </select>
+    </p>
+    @if (procs != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>RowID</th>
+                    <th>Data_Type</th>
+                    <th>IncomingData</th>
+                    <th>RmaData</th>
+                    <th>ErrMessage</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in procs)
+                {
+                    <tr>
+                        <td>
+                            @t.RowID
+                        </td>
+                        <td>@t.ReferenceCode</td>
+                        <td>@t.IncomingData</td>
+                        <td>@t.RmaData</td>
+                        <td>@t.ErrMessage</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        if (procs.Length > 0)
+        {
+        <p>there are @procs.Length errors found.</p>
+        }
+        else
+        {
+        <p> there is No errors found.</p>
+        }   
+    }
+}
+
+@code {
+    private RmaDataMappingValidation[] procs;
+    private string[] mapping_codes;
+    //private string selected_code;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //procs = await myDbService.GetRmaDataMappingValidationsAsync(selected_code);
+
+        mapping_codes = await myDbService.GetRmaDataMappingCodesAsync();
+    }
+
+    private async Task onMapCode(ChangeEventArgs e)
+    {
+        var selected_code = e.Value.ToString();
+        if (selected_code!="select")
+        {
+            procs = await myDbService.GetRmaDataMappingValidationsAsync(selected_code);
+        }
+        else
+        {
+            procs = null;
+        }
+    }
+}
+

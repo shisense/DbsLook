@@ -1,0 +1,46 @@
+﻿@page "/procedures-detail/{name}"
+
+@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+@inject WeatherForecastService ForecastService
+@inject MyDbService myDbService
+@inject NavigationManager NavManager
+
+@using Microsoft.AspNetCore.WebUtilities
+
+    <h1>Procedure: @name</h1>
+
+    <div class="alert alert-secondary mt-4" role="alert">
+        <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+        <strong>Definition</strong>
+    </div>
+
+    @if (pdetail == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div><code><pre>@pdetail.Definition</pre></code></div>
+
+    }
+
+    @code {
+        private DbProcDetail pdetail;
+
+
+        [Parameter]
+        public string name { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            pdetail = (await myDbService.GetProceduresDetailAsync(name))[0];
+            
+            /*
+            var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("name", out var _name))
+            {
+                pdetail = (await MyDbService.GetProceduresDetailAsync(_name))[0];
+            }*/
+        }
+    }

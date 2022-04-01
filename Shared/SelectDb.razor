@@ -1,0 +1,64 @@
+﻿@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+
+@inject MyDbService myDbService
+@inject NavigationManager NavManager
+@inject AppState appState
+
+
+
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>Select a database to work on</strong>
+
+   
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Select</th>
+            <th>DBName</th>
+            <th>DataSource</th>
+            <th>Catalog</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in dbs)
+        {
+        <tr>
+            <td>
+                <input type="radio" id="@t.DBName" name="select_db" value="@t.DBName" checked="@(t.Current)" @onchange="OnDbChange">
+            </td>
+            <td>@t.DBName</td>
+            <td>@t.DataSource</td>
+            <td>@t.InitialCatalog</td>
+
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+@code {
+
+    private DbReg[] dbs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dbs = await myDbService.GetDBsAsync();
+    }
+
+    private void OnDbChange(ChangeEventArgs args)
+    {
+        var currentDbName = args.Value.ToString();
+
+        myDbService.UpdateActiveDbAsync(currentDbName);
+
+        appState.SetCurrentDB(currentDbName);
+    }
+}

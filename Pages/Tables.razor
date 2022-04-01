@@ -1,0 +1,53 @@
+﻿@page "/tables"
+
+@using DbsLook.Data
+@inject WeatherForecastService ForecastService
+@inject MyDbService MyDbService
+
+<h1>Tables</h1>
+
+<p>List of Tables.</p>
+
+@if (tbls == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Create_Date</th>
+                <th>Modify_Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in tbls)
+            {
+                <tr>
+                    <td>
+                        <NavLink class="nav-link" href="@{"columns/"+t.TableName}">
+                            @t.TableName
+                        </NavLink>
+
+                                    </td>
+                    <td>@t.CreateDate</td>
+                    <td>@t.ModifyDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+    private DbTable[] tbls;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        tbls = await MyDbService.GetTablesAsync();
+    }
+}

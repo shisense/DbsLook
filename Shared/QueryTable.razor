@@ -1,0 +1,58 @@
+﻿@using DbsLook.Data
+@using Microsoft.AspNetCore.Components
+@using System.Data;
+
+@inject MyDbService myDbService
+@inject NavigationManager NavManager
+
+
+<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@query_name</strong>
+
+</div>
+
+
+<div class="scroll">
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (DataColumn c in dt.Columns)
+                {
+                    <th>@c.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (DataRow r in dt.Rows)
+            {
+                <tr>
+                    @foreach (DataColumn c in dt.Columns)
+                    {
+                        <td>@r[c].ToString()</td>
+                    }
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+    @code {
+
+        [Parameter]
+        public string sql { get; set; }
+
+        [Parameter]
+        public string query_name { get; set; }
+
+        private DataTable dt;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            dt = await myDbService.GetQueryTableAsync(sql);
+        }
+    }

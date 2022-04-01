@@ -1,0 +1,76 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    
+    <a class="navbar-brand" href=""><span class="oi oi-grid-two-up" aria-hidden="true"></span>AppsRun* DB</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+
+<!-- https://useiconic.com/open-->
+
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+
+
+        <!--
+    <li class="nav-item px-3">
+        <NavLink class="nav-link" href="counter">
+            <span class="oi oi-plus" aria-hidden="true"></span> Counter
+        </NavLink>
+    </li>-->
+
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="tables">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Tables
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="procedures">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Procedures
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="functions">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Functions
+            </NavLink>
+        </li>
+
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="dbmanqueryhead">
+                <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Queries
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="RmaDataMappingValidation">
+                <span class="oi oi-wrench" aria-hidden="true"></span> RMADataMap
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="about">
+                <span class="oi oi-info" aria-hidden="true"></span> About
+            </NavLink>
+        </li>
+
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
